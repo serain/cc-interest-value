@@ -13,10 +13,9 @@ from pytrends.request import TrendReq
 CC_API_URL = 'https://min-api.cryptocompare.com/data/pricehistorical'
 
 
-def get_coin_interest(keyword):
+def get_coin_interest(keywords):
     pytrends = TrendReq(hl='en-US', tz=360)
-    kw_list = [keyword]
-    pytrends.build_payload(kw_list,
+    pytrends.build_payload(keywords,
                            cat       = 0,
                            timeframe = 'today 12-m',
                            geo       = '',
@@ -83,7 +82,7 @@ def double_plot(value_data, interest_data):
                            len(value_ax.get_yticks())))
 
 
-coin_interest = get_coin_interest('ripple')
+coin_interest = get_coin_interest(['ripple'])
 coin_value = get_coin_value('XRP', 'USD')
 double_plot(coin_value, coin_interest)
 plt.show()
