@@ -3,6 +3,7 @@
 import time
 import math
 import requests
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import date, datetime, timedelta
@@ -56,6 +57,7 @@ def double_plot(value_data, interest_data):
     value_ax.set_ylim(ymin=0, ymax=ymax)
     value_ax.legend().remove()
     value_ax.set_ylabel('value', color='orange', weight='bold')
+    value_ax.grid()
 
     for tl in value_ax.get_yticklabels():
         tl.set_color('orange')
@@ -68,12 +70,17 @@ def double_plot(value_data, interest_data):
                                        legend    = 'interest',
                                        linestyle = '--',
                                        marker    = 'o')
+    interest_ax.set_ylim(ymin=0, ymax=100)
     interest_ax.legend().remove()
     interest_ax.set_ylabel('interest', color='blue', weight='bold')
 
     for tl in interest_ax.get_yticklabels():
         tl.set_color('blue')
         tl.set_weight('bold')
+
+    interest_ax.set_yticks(np.linspace(interest_ax.get_yticks()[0],
+                           interest_ax.get_yticks()[-1],
+                           len(value_ax.get_yticks())))
 
 
 coin_interest = get_coin_interest('ripple')
