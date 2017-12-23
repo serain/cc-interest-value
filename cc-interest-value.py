@@ -28,7 +28,7 @@ def get_coin_interest(keywords):
 def get_coin_value(symbol, currency):
     # today at midnight
     today = datetime.combine(date.today(), datetime.min.time())
-    qdates = [today - timedelta(days=x) for x in range(0, 3)]
+    qdates = [today - timedelta(days=x) for x in range(0, 365)]
     values = []
 
     for qdate in qdates:
