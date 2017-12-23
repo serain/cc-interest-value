@@ -2,6 +2,7 @@
 
 import time
 import math
+import json
 import requests
 import numpy as np
 import pandas as pd
@@ -27,7 +28,7 @@ def get_coin_interest(keywords):
 def get_coin_value(symbol, currency):
     # today at midnight
     today = datetime.combine(date.today(), datetime.min.time())
-    qdates = [today - timedelta(days=x) for x in range(0, 365)]
+    qdates = [today - timedelta(days=x) for x in range(0, 3)]
     values = []
 
     for qdate in qdates:
@@ -82,8 +83,23 @@ def double_plot(value_data, interest_data):
                            interest_ax.get_yticks()[-1],
                            len(value_ax.get_yticks())))
 
+def get_args():
+    # temporary groundwork for argparse until I get home
+    with open('cryptocurrencies.json') as f:
+      data = json.load(f)
 
-coin_interest = get_coin_interest(['ripple'])
-coin_value = get_coin_value('XRP', 'USD')
-double_plot(coin_value, coin_interest)
-plt.show()
+    args = type('', (), {})()
+    args.keywords = data['xrp']['keyword']
+    args.symbol = data['xrp']['symbol']
+    args.currency = 'USD'
+
+    return args
+
+
+if __name__ == '__main__':
+    args = get_args()
+
+    coin_interest = get_coin_interest([args.keyword])
+    coin_value = get_coin_value(args.symbol, args.currency)
+    double_plot(coin_value, coin_interest)
+    plt.show()
