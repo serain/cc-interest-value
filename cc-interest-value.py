@@ -4,6 +4,7 @@ import time
 import math
 import json
 import requests
+import animation
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -89,7 +90,7 @@ def get_args():
       data = json.load(f)
 
     args = type('', (), {})()
-    args.keywords = data['xrp']['keyword']
+    args.keyword = data['xrp']['keyword']
     args.symbol = data['xrp']['symbol']
     args.currency = 'USD'
 
