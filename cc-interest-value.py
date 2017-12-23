@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 
+import sys
 import time
 import math
 import json
+import argparse
 import requests
 import animation
 import numpy as np
@@ -29,6 +31,9 @@ def get_coin_interest(keywords):
 
 @animation.wait('spinner')
 def get_coin_value(symbol, currency):
+    symbol = symbol.upper()
+    currency = currency.upper()
+
     # today at midnight
     today = datetime.combine(date.today(), datetime.min.time())
     qdates = [today - timedelta(days=x) for x in range(0, 365)]
@@ -38,7 +43,7 @@ def get_coin_value(symbol, currency):
         r = requests.get(CC_API_URL, {'fsym' : symbol,
                                       'tsyms': currency,
                                       'ts'   : time.mktime(qdate.timetuple())})
-        values.append(r.json()['XRP']['USD'])
+        values.append(r.json()[symbol][currency])
 
     df = pd.DataFrame(data={'date': qdates, symbol: values})
     df = df.set_index(['date']).sort_index()
@@ -87,15 +92,36 @@ def double_plot(value_data, interest_data):
                            interest_ax.get_yticks()[-1],
                            len(value_ax.get_yticks())))
 
+
 def get_args():
     # temporary groundwork for argparse until I get home
     with open('cryptocurrencies.json') as f:
-      data = json.load(f)
+        cc_data = json.load(f)
 
-    args = type('', (), {})()
-    args.keyword = data['xrp']['keyword']
-    args.symbol = data['xrp']['symbol']
-    args.currency = 'USD'
+    parser = argparse.ArgumentParser(description='Graph CC interest vs value')
+    parser.add_argument('-c', '--currency', type=str, default='usd', 
+                        help='currency value (default: USD)')
+
+    action = parser.add_mutually_exclusive_group(required=True)
+    action.add_argument('--list', action='store_true', 
+                        help='list supported cryptocurrency symbols')
+    action.add_argument('-s', '--symbol', type=str,
+                        help='cryptocurrency symbol')
+
+    args = parser.parse_args()
+
+    if args.list:
+        for symbol in cc_data:
+            print(symbol.upper())
+            print('    description : {}'.format(cc_data[symbol]['description']))
+            print('    keyword     : {}\n'.format(cc_data[symbol]['keyword']))
+        sys.exit(0)
+
+    if args.symbol.lower() not in cc_data:
+        print(f'Couldn\'t find symbol \'{args.symbol}\'')
+        sys.exit(1)
+
+    args.keyword = cc_data[args.symbol]['keyword']
 
     return args
 
@@ -103,12 +129,12 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
 
-    print(f'Grabbing {args.keyword} Google Trends data')
+    print(f'Grabbing \'{args.keyword}\' Google Trends data')
     coin_interest = get_coin_interest([args.keyword])
 
-    print(f'\rPulling {args.symbol} historical values')
+    print(f'\rPulling {args.symbol.upper()} historical values')
     coin_value = get_coin_value(args.symbol, args.currency)
 
-    print('Plotting up')
+    print('\rPlotting up')
     double_plot(coin_value, coin_interest)
     plt.show()

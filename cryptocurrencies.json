@@ -1,6 +1,10 @@
 {
     "xrp": {
-        "symbol": "XRP",
-        "keyword": "ripple"
+        "keyword": "ripple",
+        "description": "Ripple Coin (XRP)"
+    },
+    "btc": {
+        "keyword": "bitcoin",
+        "description": "Bitcoin (BTC)"
     }
 }
