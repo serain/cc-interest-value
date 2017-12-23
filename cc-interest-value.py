@@ -15,6 +15,7 @@ from pytrends.request import TrendReq
 CC_API_URL = 'https://min-api.cryptocompare.com/data/pricehistorical'
 
 
+@animation.wait('spinner')
 def get_coin_interest(keywords):
     pytrends = TrendReq(hl='en-US', tz=360)
     pytrends.build_payload(keywords,
@@ -26,6 +27,7 @@ def get_coin_interest(keywords):
     return pytrends.interest_over_time()
 
 
+@animation.wait('spinner')
 def get_coin_value(symbol, currency):
     # today at midnight
     today = datetime.combine(date.today(), datetime.min.time())
@@ -100,7 +102,9 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
 
+    print('Grabbing Google Trends data')
     coin_interest = get_coin_interest([args.keyword])
+    print(f'\rPulling {args.symbol} historical values')
     coin_value = get_coin_value(args.symbol, args.currency)
     double_plot(coin_value, coin_interest)
     plt.show()
