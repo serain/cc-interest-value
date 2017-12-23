@@ -4,12 +4,15 @@ Quick thing I threw together while waiting for a flight.
 
 Allows you to graph a cryptocurrency's value against public interest over time (based on Google Trends).
 
+## Example: Ripple interest vs. XRP value
+
 ![Ripple interest vs. XRP value](/screenshot/ripple.png "Ripple interest vs. XRP value")
 
 ## To Do
 
  - Populate cryptocurrencies
  - Support multiple keywords
+ - Configurable timeframes
  - Legends on graph
  - Esthetics
  - Save graph to file
@@ -45,10 +48,10 @@ BTC
     keyword     : bitcoin
 ```
 
-Generate graph for XRP:
+Generate graph for XRP value in Euros:
 
 ```
-$ ./cc-interest-value.py --symbol xrp
+$ ./cc-interest-value.py --symbol xrp --currency eur
 ```
 
 ## Add Crypto-Currency
