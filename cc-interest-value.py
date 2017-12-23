@@ -46,6 +46,7 @@ def get_coin_value(symbol, currency):
     return df
 
 
+@animation.wait('spinner')
 def double_plot(value_data, interest_data):
     fig, value_ax = plt.subplots()
 
@@ -102,9 +103,12 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
 
-    print('Grabbing Google Trends data')
+    print(f'Grabbing {args.keyword} Google Trends data')
     coin_interest = get_coin_interest([args.keyword])
+
     print(f'\rPulling {args.symbol} historical values')
     coin_value = get_coin_value(args.symbol, args.currency)
+
+    print('Plotting up')
     double_plot(coin_value, coin_interest)
     plt.show()
