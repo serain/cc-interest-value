@@ -1,0 +1,4 @@
+animation==0.0.4
+requests==2.18.4
+numpy==1.13.3
+pytrends==4.3.0
