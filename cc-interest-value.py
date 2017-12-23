@@ -77,6 +77,7 @@ def double_plot(value_data, interest_data):
         tl.set_color('blue')
         tl.set_weight('bold')
 
+    # align y axes
     interest_ax.set_yticks(np.linspace(interest_ax.get_yticks()[0],
                            interest_ax.get_yticks()[-1],
                            len(value_ax.get_yticks())))
